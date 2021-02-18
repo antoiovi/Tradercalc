@@ -34,8 +34,8 @@ static final int N_VALS=3;
 
 static final Color TEXTCOLOR=Color.YELLOW;
 JComponent[] component=new JComponent[12];
-String[] labels_calc_text= {"Value","Increment","Percent","Value percent"};
-JLabel[] labels_calc=new JLabel[4];
+String[] labels_calc_text= {"Val. A","Incr."," % ","A %", "A-A%","A+ A%"};
+JLabel[] labels_calc=new JLabel[6];
 
 JComboBox[] combo_increment = new JComboBox[N_VALS];
 JSpinner[] spinners_val=new JSpinner[N_VALS];
@@ -43,6 +43,10 @@ JSpinner[] spinners_decstep=new JSpinner[N_VALS];
 JSpinner[] spinners_perc=new JSpinner[N_VALS];
 
 JTextField[] textField_val_perc=new JTextField[N_VALS];
+JTextField[] text_val_A_lessPerc=new JTextField[N_VALS];
+JTextField[] text_val_A_plusPerc=new JTextField[N_VALS];
+
+
 private JTextField textField;
 
 Calc_perc[] calc_perc=new Calc_perc[N_VALS];
@@ -59,37 +63,47 @@ Calc_perc[] calc_perc=new Calc_perc[N_VALS];
 
 		Box box_perc=Box.createVerticalBox();
 		Box box_val_perc=Box.createVerticalBox();
-		for(int i=0;i<4;i++) {
+		Box box_val_plus_perc=Box.createVerticalBox();
+		Box box_val_less_perc=Box.createVerticalBox();
+
+
+		for(int i=0;i<labels_calc.length;i++) {
 		labels_calc[i]=new JLabel(labels_calc_text[i]);
 		}
+		
 		box_val.add(labels_calc[0]);
 		box_increment.add(labels_calc[1]);
 		box_perc.add(labels_calc[2]);
 		box_val_perc.add(labels_calc[3]);
+		box_val_plus_perc.add(labels_calc[4]);
+		box_val_less_perc.add(labels_calc[5]);
+
 
 		//	SpinnerNumberModel(value,minimum,maximum,stepSize)
 		for(int i=0;i<N_VALS;i++) {
 			calc_perc[i]=new Calc_perc();
-			spinners_val[i]=this.getSpinner(0.0,100000.0,0.001, 3);
+			spinners_val[i]=this.getSpinner(0.0,100000.0,0.001, 4);
 			spinners_val[i].addChangeListener(this);
 			box_val.add(spinners_val[i]);
 			
 			combo_increment[i]=new JComboBox();
 			combo_increment[i].setModel(new DefaultComboBoxModel( new Double[] {0.001,0.01,0.1,1.0,10.0,100.0,1000.0}));
+			combo_increment[i].setMaximumSize( combo_increment[i].getPreferredSize() );
 			combo_increment[i].addActionListener(this);
 			spinners_decstep[i]=new JSpinner(new SpinnerListModel(new Double[] {0.001,0.01,0.1,1.0,10.0,100.0,1000.0}));
 			spinners_decstep[i].addChangeListener(this);
 			box_increment.add(combo_increment[i]);
 			
-			spinners_perc[i]=this.getSpinner(0.0,100.0,0.01, 2);
+			spinners_perc[i]=this.getSpinner(0.0,100.0,0.01, 2,65);
 			spinners_perc[i].addChangeListener(this);
 			box_perc.add(spinners_perc[i]);
 
-			textField_val_perc[i] = new JTextField();
-			textField_val_perc[i].setColumns(10);
-			textField_val_perc[i].setEditable(false);
-			textField_val_perc[i].setBackground(TEXTCOLOR);
+			textField_val_perc[i] = createTextField();
 			box_val_perc.add(textField_val_perc[i]);
+			text_val_A_plusPerc[i]=createTextField();
+			box_val_plus_perc.add(text_val_A_plusPerc[i]);
+			text_val_A_lessPerc[i]=createTextField();
+			box_val_less_perc.add(text_val_A_lessPerc[i]);
 			
 			combo_increment[i].setSelectedIndex(3);
 
@@ -104,13 +118,19 @@ Calc_perc[] calc_perc=new Calc_perc[N_VALS];
 		panel.add(box_val);
 		panel.add(box_perc);
 		panel.add(box_val_perc);
-		
-		
+		panel.add(box_val_plus_perc);
+		panel.add(box_val_less_perc);		
 		
 	}
 
 	
-	
+	private JTextField createTextField() {
+		JTextField textField = new JTextField();
+		textField.setColumns(8);
+		textField.setEditable(false);
+		textField.setBackground(TEXTCOLOR);
+		return textField;
+	}
 	
 	class Calc_perc{
 		double valore=1.0;
@@ -142,6 +162,7 @@ Calc_perc[] calc_perc=new Calc_perc[N_VALS];
 	
 	private JSpinner getSpinner(double min,double max,double stepSize, int digits)
     {
+
         double value = 1.000;
         //   SpinnerNumberModel(value,minimum,maximum,stepSize)
         SpinnerNumberModel model = new SpinnerNumberModel(value, min, max, stepSize);
@@ -152,6 +173,22 @@ Calc_perc[] calc_perc=new Calc_perc[N_VALS];
         editor.getTextField().setHorizontalAlignment(SwingConstants.RIGHT);
         Dimension d = spinner.getPreferredSize();
         d.width = 85;
+        spinner.setPreferredSize(d);
+        return spinner;
+    }
+	private JSpinner getSpinner(double min,double max,double stepSize, int digits,int width)
+    {
+
+        double value = 1.000;
+        //   SpinnerNumberModel(value,minimum,maximum,stepSize)
+        SpinnerNumberModel model = new SpinnerNumberModel(value, min, max, stepSize);
+        JSpinner spinner = new JSpinner(model);
+        JSpinner.NumberEditor editor = (JSpinner.NumberEditor)spinner.getEditor();
+        DecimalFormat format = editor.getFormat();
+        format.setMinimumFractionDigits(digits);
+        editor.getTextField().setHorizontalAlignment(SwingConstants.RIGHT);
+        Dimension d = spinner.getPreferredSize();
+        d.width = width;
         spinner.setPreferredSize(d);
         return spinner;
     }
@@ -167,13 +204,23 @@ Calc_perc[] calc_perc=new Calc_perc[N_VALS];
 			calc_perc[i].setVal(v);
 			double x=calc_perc[i].getVal_perc();
 			textField_val_perc[i].setText(String.format("%,.4f",x ));
-			
+
+			double sum=calc_perc[i].getVal()+calc_perc[i].getVal_perc();
+			double men=calc_perc[i].getVal()-calc_perc[i].getVal_perc();
+			text_val_A_lessPerc[i].setText(String.format("%,.4f",sum ));
+			text_val_A_plusPerc[i].setText(String.format("%,.4f",men ));
+
 		}else if(Arrays.asList(spinners_perc).contains(arg0.getSource()) ) {
 			int i=Arrays.asList(spinners_perc).indexOf(arg0.getSource());
 			double p=(Double)((JSpinner) arg0.getSource()).getValue();
 			calc_perc[i].setPerc(p);
 			double x=calc_perc[i].getVal_perc();
 			textField_val_perc[i].setText(String.format("%,.4f",x ));
+
+			double sum=calc_perc[i].getVal()+calc_perc[i].getVal_perc();
+			double men=calc_perc[i].getVal()-calc_perc[i].getVal_perc();
+			text_val_A_lessPerc[i].setText(String.format("%,.4f",sum ));
+			text_val_A_plusPerc[i].setText(String.format("%,.4f",men ));
 
 		}else if(Arrays.asList(spinners_decstep).contains(arg0.getSource()) ) {
 			int i=Arrays.asList(spinners_decstep).indexOf(arg0.getSource());
