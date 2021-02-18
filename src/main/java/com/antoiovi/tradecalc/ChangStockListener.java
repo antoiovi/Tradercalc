@@ -8,5 +8,5 @@ public interface ChangStockListener {
 	// Modified current stock
 	public void modifiedStock(Stock stock);
 	
-	
+	public void incrementStep(double incerment);
 }

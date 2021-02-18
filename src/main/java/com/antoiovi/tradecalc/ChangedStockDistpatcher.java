@@ -27,6 +27,11 @@ public class ChangedStockDistpatcher {
 			s.modifiedStock(stock);
 		}
 	}
+	public void dispatchIncrementSpinnerChanged(double spinner_increment) {
+		for (ChangStockListener s: stocklistener) {
+			s.incrementStep(spinner_increment);
+		}
+	}
 	
 	/**
 	 * Add a class that implements ChangeStockListener to the list stocklistener

@@ -135,4 +135,10 @@ public class Tradecalc extends JFrame implements ChangStockListener {
 			//s.log();
 
 		}
+
+		@Override
+		public void incrementStep(double incerment) {
+			// TODO Auto-generated method stub
+			
+		}
 }

@@ -80,7 +80,7 @@ public class Panel_profit extends JPanel implements ChangeListener,ChangStockLis
 		textField_netprofit.setBackground(TEXTCOLOR);
 		component[NETPROFIT]=textField_netprofit;
 		
-		JSpinner spinner_loss = getSpinner(0.001,1000.0, 0.001,3);
+		JSpinner spinner_loss = getSpinner(0.001,1000.0, 0.0001,4);
 		spinner_loss.addChangeListener(this);
 		component[LOSSPRICE]=spinner_loss;
 		JTextField textField_lossperc = new JTextField();
@@ -214,6 +214,20 @@ private boolean changed=false;
 	void log(String s) {
 		//System.out.println("[Panel_Profit]"+s);
 
+	}
+
+
+
+
+	@Override
+	public void incrementStep(double incerment) {
+		// TODO Auto-generated method stub
+		JSpinner spinner_take =	(JSpinner)component[TAKEPRICE];
+		JSpinner spinner_loss =	(JSpinner)component[LOSSPRICE];
+		SpinnerNumberModel model=(SpinnerNumberModel)spinner_take.getModel();
+		model.setStepSize(incerment);
+		model=(SpinnerNumberModel)spinner_loss.getModel();
+		model.setStepSize(incerment);
 	}
 
 

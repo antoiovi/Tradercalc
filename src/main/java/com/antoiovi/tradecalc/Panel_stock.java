@@ -295,9 +295,15 @@ public void changedStock(Stock stock) {
 			JSpinner spinner=(JSpinner)component[PRICE];
 			SpinnerNumberModel model=(SpinnerNumberModel)spinner.getModel();
 			model.setStepSize(step);
-
+			dispatcher.dispatchIncrementSpinnerChanged(step);
 		}
 		
 		
+	}
+
+	@Override
+	public void incrementStep(double incerment) {
+		 
+		// do nothing cause this panel lanch the change
 	}
 }
