@@ -51,8 +51,8 @@ public class Panel_calc extends JPanel implements ChangeListener, ActionListener
     /**
      * Create the panel.
      */
-    public Panel_calc(ChangedStockDistpatcher dispatcher) {
-
+    public Panel_calc(ChangedStockDistpatcher dispatcher, Stock stock) {
+        this.stock = stock;
         this.dispatcher = dispatcher;
         this.dispatcher.add(this);
 
@@ -247,21 +247,24 @@ public class Panel_calc extends JPanel implements ChangeListener, ActionListener
     }
 
     public void recalc() {
+
     }
 
-    ;
-	
-	public void changedStock(Stock stock) {
+    public void changedStock(Stock stock) {
         this.stock = stock;
         for (int i = 0; i < N_VALS; i++) {
             spinners_val[i].setValue(stock.price);
+            double perc = Double.parseDouble(textField_val_perc[i].getText());
+
+            text_val_A_lessPerc[i].setText(String.format("%,.4f", stock.price - (stock.price * perc)));
+            text_val_A_plusPerc[i].setText(String.format("%,.4f", stock.price + (stock.price * perc)));
+
         }
 
     }
 
-    ;
-	// Modified current stock
-	public void modifiedStock(Stock stock) {
+    // Modified current stock
+    public void modifiedStock(Stock stock) {
         this.stock = stock;
         for (int i = 0; i < N_VALS; i++) {
             spinners_val[i].setValue(stock.price);

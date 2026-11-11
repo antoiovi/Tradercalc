@@ -52,7 +52,7 @@ public class Panel_tradecalc extends JPanel {
         panel.add(panel_profit);
         panel_profit.setBorder(new LineBorder(new Color(0, 0, 0)));
 
-        Panel_calc panel_3 = new Panel_calc(dispatcher);
+        Panel_calc panel_3 = new Panel_calc(dispatcher, currentsock);
         panel.add(panel_3);
 
         JPanel panel_2 = new JPanel();
