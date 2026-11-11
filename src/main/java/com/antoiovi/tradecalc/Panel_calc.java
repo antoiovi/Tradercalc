@@ -94,6 +94,7 @@ public class Panel_calc extends JPanel implements ChangeListener, ActionListener
 
             spinners_perc[i] = this.getSpinner(0.0, 100.0, 0.01, 2, 65);
             spinners_perc[i].addChangeListener(this);
+
             box_perc.add(spinners_perc[i]);
 
             textField_val_perc[i] = createTextField();
