@@ -1,0 +1,29 @@
+
+<configuration xmlns="https://github.com/qoomon/maven-git-versioning-extension"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="https://github.com/qoomon/maven-git-versioning-extension https://qoomon.github.io/maven-git-versioning-extension/configuration-9.4.0.xsd">
+    <!-- Riconosce tag del tipo v1.0, v1.1, v2.0 -->
+    <describeTagPattern><![CDATA[v(.+)]]></describeTagPattern>
+    <refs>
+
+        <!-- MAIN: versione stabile -->
+        <ref type="branch">
+            <pattern>main</pattern>
+            <version>${describe.tag.version}</version>
+        </ref>
+
+        <!-- DEVELOP: versione beta -->
+        <ref type="branch">
+            <pattern>develop</pattern>
+            <version>${describe.tag.version}-beta</version>
+        </ref>
+
+        <!-- ALTRI BRANCH: versione alpha -->
+        <ref type="branch">
+            <pattern>.+</pattern>
+            <version>${describe.tag.version}-alpha</version>
+        </ref>
+
+    </refs>
+
+</configuration>
