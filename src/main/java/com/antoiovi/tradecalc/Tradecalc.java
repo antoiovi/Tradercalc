@@ -1,5 +1,9 @@
 package com.antoiovi.tradecalc;
 
+import javax.swing.SwingUtilities;
+import com.formdev.flatlaf.FlatLightLaf;
+
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -47,6 +51,7 @@ public class Tradecalc extends JFrame implements ChangStockListener {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		    FlatLightLaf.setup();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {

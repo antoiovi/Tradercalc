@@ -34,7 +34,30 @@
 	</archive>
     </configuration>
  </plugin>
- </plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>3.6.0</version>
+
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+
+                    <configuration>
+                        <transformers>
+                            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <mainClass>com.antoiovi.tradecalc.Tradecalc</mainClass>
+                            </transformer>
+                        </transformers>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+
+    </plugins>
 </build>
   <dependencies>
     <dependency>
@@ -49,6 +72,11 @@
     <groupId>com.opencsv</groupId>
     <artifactId>opencsv</artifactId>
     <version>4.0</version>
+</dependency>
+<dependency>
+    <groupId>com.formdev</groupId>
+    <artifactId>flatlaf</artifactId>
+    <version>3.6.2</version>
 </dependency>
   </dependencies>
 </project>
