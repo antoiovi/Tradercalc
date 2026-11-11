@@ -28,7 +28,7 @@ public class Panel_calc extends JPanel implements ChangeListener, ActionListener
     Stock stock;
     private ChangedStockDistpatcher dispatcher;
 
-    static final int N_VALS = 3;
+    static final int N_VALS = 4;
 
     static final Color TEXTCOLOR = Color.YELLOW;
     JComponent[] component = new JComponent[12];
@@ -80,7 +80,7 @@ public class Panel_calc extends JPanel implements ChangeListener, ActionListener
         //	SpinnerNumberModel(value,minimum,maximum,stepSize)
         for (int i = 0; i < N_VALS; i++) {
             calc_perc[i] = new Calc_perc();
-            spinners_val[i] = this.getSpinner(0.0, 100000.0, 0.001, 4);
+            spinners_val[i] = this.getSpinner(1.0,0.0, 100000.0, 0.001, 4);
             spinners_val[i].addChangeListener(this);
             box_val.add(spinners_val[i]);
 
@@ -92,7 +92,7 @@ public class Panel_calc extends JPanel implements ChangeListener, ActionListener
             spinners_decstep[i].addChangeListener(this);
             box_increment.add(combo_increment[i]);
 
-            spinners_perc[i] = this.getSpinner(0.0, 100.0, 0.01, 2, 65);
+            spinners_perc[i] = this.getSpinner((1+i)*2.5,0.0, 100.0, 0.1, 2);
             spinners_perc[i].addChangeListener(this);
 
             box_perc.add(spinners_perc[i]);
@@ -160,21 +160,28 @@ public class Panel_calc extends JPanel implements ChangeListener, ActionListener
 
     }
 
-    private JSpinner getSpinner(double min, double max, double stepSize, int digits) {
+    private JSpinner getSpinner(
+        double defaultValue, double min, double max, double stepSize, int digits) {
 
-        double value = 1.000;
-        //   SpinnerNumberModel(value,minimum,maximum,stepSize)
-        SpinnerNumberModel model = new SpinnerNumberModel(value, min, max, stepSize);
-        JSpinner spinner = new JSpinner(model);
-        JSpinner.NumberEditor editor = (JSpinner.NumberEditor) spinner.getEditor();
-        DecimalFormat format = editor.getFormat();
-        format.setMinimumFractionDigits(digits);
-        editor.getTextField().setHorizontalAlignment(SwingConstants.RIGHT);
-        Dimension d = spinner.getPreferredSize();
-        d.width = 85;
-        spinner.setPreferredSize(d);
-        return spinner;
-    }
+    SpinnerNumberModel model =
+            new SpinnerNumberModel(defaultValue, min, max, stepSize);
+
+    JSpinner spinner = new JSpinner(model);
+    JSpinner.NumberEditor editor =
+            (JSpinner.NumberEditor) spinner.getEditor();
+
+    DecimalFormat format = editor.getFormat();
+    format.setMinimumFractionDigits(digits);
+
+    editor.getTextField().setHorizontalAlignment(SwingConstants.RIGHT);
+
+    Dimension d = spinner.getPreferredSize();
+    d.width = 85;
+    spinner.setPreferredSize(d);
+
+    return spinner;
+}
+
 
     private JSpinner getSpinner(double min, double max, double stepSize, int digits, int width) {
 

@@ -4,7 +4,7 @@
   <groupId>com.antoiovi.tradecalc</groupId>
   <artifactId>tradecalc</artifactId>
   <packaging>jar</packaging>
-<version>1.0.1-alpha</version>
+<version>1.0-beta</version>
   <name>tradecalc</name>
   <url>http://maven.apache.org</url>
 <properties>

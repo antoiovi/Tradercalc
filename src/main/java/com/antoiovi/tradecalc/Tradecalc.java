@@ -70,7 +70,7 @@ public class Tradecalc extends JFrame implements ChangStockListener {
 	@SuppressWarnings("serial")
 	public Tradecalc() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 550);//(x,y,w,h)
+		setBounds(100, 100, 1200, 800);//(x,y,w,h)
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
