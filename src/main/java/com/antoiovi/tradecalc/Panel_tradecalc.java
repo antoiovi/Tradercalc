@@ -25,7 +25,7 @@ public class Panel_tradecalc extends JPanel {
 	
 	FileManager fileManager=new FileManager();
 	
-	static final int NSTOCKS=5;
+	static final int NSTOCKS=25;
 	private int currentindex = 0;
 	private JLabel lblIndex;
 	

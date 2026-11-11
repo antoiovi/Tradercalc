@@ -21,6 +21,8 @@ mkdir -p dist/linux
 
 Creazione applicazione autonoma
 
+(Eventualmente :  rm -r dist/linux/Tradecalc)
+
 JAR=$(basename target/jpackage-input/tradecalc-*.jar)
 
 jpackage \
