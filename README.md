@@ -70,3 +70,13 @@ Copy-Item target\tradecalc-*.jar target\jpackage-input\
 
 $jar = (Get-ChildItem target\jpackage-input\tradecalc-*.jar).Name
 ```
+
+
+
+# Revisioni:
+
+* 2026 Novembre
+** Portato massimo numero di stocks a 25
+** Aggiornato LookAndFeel Swing a FlatLaf
+** Impostato a Java21
+** Creato impostazioni per esportare applicazione indipendente.
