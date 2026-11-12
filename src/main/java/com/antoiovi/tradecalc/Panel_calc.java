@@ -292,7 +292,7 @@ public class Panel_calc extends JPanel implements ChangeListener, ActionListener
             double loss=(stock.price*stock.quantity)-stoplossprice;// Loss in currency
 
 
-            System.out.println(String.format("[Panel_calc] recalc() i=%d stock.price=%.4f perc=%.4f percval=%.4f pricetake=%.4f priceloss=%.4f takeprice=%.4f stoplossprice=%.4f profit=%.4f loss=%.4f", i, stock.price, perc, percval, pricetake, priceloss, takeprice, stoplossprice, profit, loss));
+            //System.out.println(String.format("[Panel_calc] recalc() i=%d stock.price=%.4f perc=%.4f percval=%.4f pricetake=%.4f priceloss=%.4f takeprice=%.4f stoplossprice=%.4f profit=%.4f loss=%.4f", i, stock.price, perc, percval, pricetake, priceloss, takeprice, stoplossprice, profit, loss));
 
             
 
