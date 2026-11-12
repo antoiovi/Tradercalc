@@ -32,8 +32,8 @@ public class Panel_calc extends JPanel implements ChangeListener, ActionListener
 
     static final Color TEXTCOLOR = Color.YELLOW;
     JComponent[] component = new JComponent[12];
-    String[] labels_calc_text = {"Val. A", "Incr.", " % ", "A %", "A-A%", "A+ A%"};
-    JLabel[] labels_calc = new JLabel[6];
+    String[] labels_calc_text = {"Val. A", "Incr.", " % ", "A %", "Take profit", "Stop loss","Net Loss","Net profit"};
+    JLabel[] labels_calc = new JLabel[labels_calc_text.length];
 
     JComboBox[] combo_increment = new JComboBox[N_VALS];
     JSpinner[] spinners_val = new JSpinner[N_VALS];
@@ -44,7 +44,9 @@ public class Panel_calc extends JPanel implements ChangeListener, ActionListener
     JTextField[] text_val_A_lessPerc = new JTextField[N_VALS];
     JTextField[] text_val_A_plusPerc = new JTextField[N_VALS];
 
-    private JTextField textField;
+    JTextField[] textFieldAloss= new JTextField[N_VALS];
+    JTextField[] textFieldAtake= new JTextField[N_VALS];
+
 
     Calc_perc[] calc_perc = new Calc_perc[N_VALS];
 
@@ -66,6 +68,9 @@ public class Panel_calc extends JPanel implements ChangeListener, ActionListener
         Box box_val_plus_perc = Box.createVerticalBox();
         Box box_val_less_perc = Box.createVerticalBox();
 
+        Box box_loss = Box.createVerticalBox();
+        Box box_take = Box.createVerticalBox();
+
         for (int i = 0; i < labels_calc.length; i++) {
             labels_calc[i] = new JLabel(labels_calc_text[i]);
         }
@@ -76,6 +81,8 @@ public class Panel_calc extends JPanel implements ChangeListener, ActionListener
         box_val_perc.add(labels_calc[3]);
         box_val_plus_perc.add(labels_calc[4]);
         box_val_less_perc.add(labels_calc[5]);
+        box_loss.add(labels_calc[6]);
+        box_take.add(labels_calc[7]);
 
         //	SpinnerNumberModel(value,minimum,maximum,stepSize)
         for (int i = 0; i < N_VALS; i++) {
@@ -104,6 +111,12 @@ public class Panel_calc extends JPanel implements ChangeListener, ActionListener
             text_val_A_lessPerc[i] = createTextField();
             box_val_less_perc.add(text_val_A_lessPerc[i]);
 
+            textFieldAloss[i] = createTextField();
+            textFieldAtake[i] = createTextField();
+            box_loss.add(textFieldAloss[i]);
+            box_take.add(textFieldAtake[i]);
+
+
             combo_increment[i].setSelectedIndex(3);
 
         }
@@ -118,6 +131,8 @@ public class Panel_calc extends JPanel implements ChangeListener, ActionListener
         panel.add(box_val_perc);
         panel.add(box_val_plus_perc);
         panel.add(box_val_less_perc);
+        panel.add(box_loss);
+        panel.add(box_take);
 
     }
 
@@ -234,6 +249,7 @@ public class Panel_calc extends JPanel implements ChangeListener, ActionListener
             SpinnerNumberModel model = (SpinnerNumberModel) spinners_val[i].getModel();
             model.setStepSize(step);
         }
+        recalc();
 
     }
 
@@ -256,27 +272,50 @@ public class Panel_calc extends JPanel implements ChangeListener, ActionListener
 
     public void recalc() {
 
+        for (int i = 0; i < N_VALS; i++) {
+            if (stock == null) {
+                return;
+            }
+            if (spinners_val[i] == null || spinners_perc[i] == null) {
+                return;
+            }
+            int nstocks=stock.quantity;
+            spinners_val[i].setValue(stock.price);
+            double perc=  Double.parseDouble(spinners_perc[i].getValue().toString());//Percentage value from spinner
+            double percval=stock.price * perc / 100;// Percentage value in currency
+            double pricetake=stock.price + percval;// Value to take profit
+            double priceloss=stock.price - percval;// Value to stop loss
+
+            double takeprice=pricetake*stock.quantity;// Take profit in currency
+            double stoplossprice=priceloss*stock.quantity;// Stop loss in currency
+            double profit=takeprice-(stock.price*stock.quantity);// Profit in currency
+            double loss=(stock.price*stock.quantity)-stoplossprice;// Loss in currency
+
+
+            System.out.println(String.format("[Panel_calc] recalc() i=%d stock.price=%.4f perc=%.4f percval=%.4f pricetake=%.4f priceloss=%.4f takeprice=%.4f stoplossprice=%.4f profit=%.4f loss=%.4f", i, stock.price, perc, percval, pricetake, priceloss, takeprice, stoplossprice, profit, loss));
+
+            
+
+            textField_val_perc[i].setText(String.format("%,.4f", percval));
+            text_val_A_lessPerc[i].setText(String.format("%,.4f", priceloss));
+            text_val_A_plusPerc[i].setText(String.format("%,.4f", pricetake));
+            textFieldAloss[i].setText(String.format("%,.1f", loss));
+            textFieldAtake[i].setText(String.format("%,.1f", profit));
+
+        }
+
+
     }
 
     public void changedStock(Stock stock) {
         this.stock = stock;
-        for (int i = 0; i < N_VALS; i++) {
-            spinners_val[i].setValue(stock.price);
-            double perc = Double.parseDouble(textField_val_perc[i].getText());
-
-            text_val_A_lessPerc[i].setText(String.format("%,.4f", stock.price - (stock.price * perc)));
-            text_val_A_plusPerc[i].setText(String.format("%,.4f", stock.price + (stock.price * perc)));
-
-        }
-
-    }
+        recalc();
+       }
 
     // Modified current stock
     public void modifiedStock(Stock stock) {
         this.stock = stock;
-        for (int i = 0; i < N_VALS; i++) {
-            spinners_val[i].setValue(stock.price);
-        }
+        recalc();
 
     }
 
